@@ -85,6 +85,27 @@ void LevelOrderTraversal(BstNode* root) {
 	}
 }
 
+void PreOrderTraversal(BstNode* root) {
+	if(root == NULL) return;
+	cout << root -> data << "  ";
+	if(root->left != NULL) PreOrderTraversal(root->left);
+	if(root->right != NULL) PreOrderTraversal(root->right);
+}
+
+void PostOrderTraversal(BstNode* root) {
+	if(root == NULL) return;
+	if(root->left != NULL) PostOrderTraversal(root->left);
+	if(root->right != NULL) PostOrderTraversal(root->right);
+	cout << root -> data << "  ";
+}
+
+void InOrderTraversal(BstNode* root) {
+	if(root == NULL) return;
+	if(root->left != NULL) InOrderTraversal(root->left);
+	cout << root -> data << "  ";
+	if(root->right != NULL) InOrderTraversal(root->right);
+}
+
 int main() {
 	BstNode* root = NULL;int num;
 	root = Insert(root, 10); root = Insert(root, 2);
@@ -109,7 +130,20 @@ int main() {
 	cout << FindHeight(root) << "\n";
 	
 	// To traverse the tree in BREADTH FIRST TRAVERSAL - LEVEL ORDER TRAVERSAL
+	cout << "\nLevel Order Traversal : ";
 	LevelOrderTraversal(root);
+	
+	cout << "\nPre Order Traversal : ";
+	// To traverse the tree in DEPTH FIRST TRAVERSAL - PRE ORDER TRAVERSAL
+	PreOrderTraversal(root);
+	
+	// To traverse the tree in DEPTH FIRST TRAVERSAL - POST ORDER TRAVERSAL
+	cout << "\nPost Order Traversal : ";
+	PostOrderTraversal(root);
+	
+	// To traverse the tree in DEPTH FIRST TRAVERSAL - IN ORDER TRAVERSAL
+	cout << "\nIn-Order Traversal : ";
+	InOrderTraversal(root);
 	
 	return 0;
 }
