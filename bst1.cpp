@@ -2,6 +2,7 @@
 // Copyright OM Bharatiya
 
 #include<iostream>
+#include<queue>
 
 using namespace std;
 
@@ -62,19 +63,54 @@ int FindMax(BstNode* root) {
 		return FindMax(root->right);
 }
 
+int FindHeight(BstNode* root) {
+	if(root == NULL) {
+		return -1;
+	}
+	else
+		return (max(FindHeight(root->left), FindHeight(root->right)) + 1);
+}
+
+void LevelOrderTraversal(BstNode* root) {
+	if(root==NULL) return;
+	queue<BstNode*> q;
+	q.push(root);
+	
+	while(!q.empty()){
+		BstNode* current = q.front();
+		cout << current -> data << " ";
+		if(current->left != NULL) q.push(current->left);
+		if(current->right != NULL) q.push(current->right);
+		q.pop();
+	}
+}
+
 int main() {
 	BstNode* root = NULL;int num;
-	root = Insert(root, 10); root = Insert(root, 20);
+	root = Insert(root, 10); root = Insert(root, 2);
 	root = Insert(root, 30); root = Insert(root, 40);
-	root = Insert(root, 50); root = Insert(root, 60);
-	root = Insert(root, 70); root = Insert(root, 80);
-	root = Insert(root, 90); root = Insert(root, 100);
+	root = Insert(root, 5); root = Insert(root, 60);
+	root = Insert(root, 70); root = Insert(root, 8);
+	root = Insert(root, 9); root = Insert(root, 100);
 	// cout<< Search(root, 40) << "\n";
 	// cout<< Search(root, 35);
+	
+	// Testing the Search() function
 	cout << "Enter the no. to Search :";
 	cin >> num;
+	// Will print true if entered no. exist in the tree otherwise print false
 	cout << (Search(root, num)? "true\n": "false\n");
-	cout << "Min :" << FindMin(root) <<"\nMax :" << FindMax(root);
+	
+	// to print min and max of the tree
+	cout << "Min :" << FindMin(root) <<"\nMax :" << FindMax(root) << "\n";
+	// cout << max(2,3);
+	
+	// To print height of the tree
+	cout << FindHeight(root) << "\n";
+	
+	// To traverse the tree in BREADTH FIRST TRAVERSAL - LEVEL ORDER TRAVERSAL
+	LevelOrderTraversal(root);
+	
 	return 0;
 }
 
