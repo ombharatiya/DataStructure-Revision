@@ -3,8 +3,13 @@
 
 #include<iostream>
 #include<queue>
+#include <limits>
+
 
 using namespace std;
+
+int INT_MIN = std::numeric_limits<int>::min(); // minimum value
+int INT_MAX = std::numeric_limits<int>::max();
 
 struct BstNode {
 	int data;
@@ -39,6 +44,13 @@ bool Search(BstNode* root, int data) {
 	else return Search(root->right, data);
 }
 
+BstNode* SearchNode(BstNode* root, int data) {
+	if(root == NULL) return NULL;
+	else if (root->data == data) return root;
+	else if (data <= root->data) return SearchNode(root->left, data);
+	else return SearchNode(root->right, data);
+}
+
 int FindMin(BstNode* root) {
 	if(root==NULL) {
 		cout<<"NULL ROOT ERROR";
@@ -61,6 +73,30 @@ int FindMax(BstNode* root) {
 	}
 	else
 		return FindMax(root->right);
+}
+
+
+BstNode* FindMinNode(BstNode* root) {
+	if(root==NULL) {
+		cout<<"NULL ROOT ERROR";
+		return NULL;
+	}
+	else if (root->left == NULL) {
+		return root;
+	}
+	else
+		return FindMinNode(root->left);
+}
+BstNode* FindMaxNode(BstNode* root) {
+	if(root==NULL) {
+		cout<<"NULL ROOT ERROR";
+		return NULL;
+	}
+	else if (root->right == NULL) {
+		return root;
+	}
+	else
+		return FindMaxNode(root->right);
 }
 
 int FindHeight(BstNode* root) {
@@ -106,12 +142,107 @@ void InOrderTraversal(BstNode* root) {
 	if(root->right != NULL) InOrderTraversal(root->right);
 }
 
+bool IsSubtreeLesser(BstNode* root, int value) {
+	if(root == NULL ) return true;
+	if((root->data <= value) && IsSubtreeLesser(root->left, value) && IsSubtreeLesser(root->right, value)) return true;
+	else return false;
+}
+
+bool IsSubtreeGreater(BstNode* root, int value) {
+	if(root == NULL ) return true;
+	if((root->data > value) && IsSubtreeGreater(root->left, value) && IsSubtreeGreater(root->right, value)) return true;
+	else return false;
+}
+
+bool IsBST(BstNode* root) {
+	if(root==NULL) return true;
+	if( IsSubtreeLesser(root->left, root->data) && IsSubtreeGreater(root->right, root->data) && IsBST(root->left) && IsBST(root->right))
+		return true;
+	else return false;
+}
+
+bool IsBSTUtil(BstNode* root, int min, int max) {
+	if(root == NULL) return true;
+	// cout << "\n*****" << min << "\t" << root->data << "\t" << max;
+	if( (root->data > min) && (root->data <= max) && IsBSTUtil(root->left, min, root->data) && IsBSTUtil(root->right, root->data, max))
+		return true;
+	else
+		return false;
+}
+
+bool IsBST_New(BstNode* root) {
+	return IsBSTUtil(root, INT_MIN, INT_MAX);
+}
+
+BstNode* rightMin(BstNode* node) {
+	if(node == NULL ) return NULL;
+	if(node->left == NULL) 
+		return node;
+	else
+		return rightMin(node->left);
+}
+
+BstNode* leftMax(BstNode* node) {
+	if(node == NULL ) return NULL;
+	if(node->right == NULL) 
+		return node;
+	else
+		return leftMax(node->right);
+}
+
+// void deleteNode(BstNode* root, int value) {
+	// if(root == NULL) 
+		// cout << "NO NODE PRESENT";
+	// if(root->data == value)
+		
+	
+// }
+
+
+
+
+BstNode* Delete(BstNode* root, int value) {
+	if(root==NULL) return root;
+	else if (value< root->data) root->left = Delete(root->left, value);
+	else if (value> root->data) root->right = Delete(root->right, value);
+	else {
+		if(root->left == NULL && root->right == NULL) {
+			delete root;
+			root=NULL;
+		}
+		
+		else if(root->left == NULL) {
+			BstNode* temp = root;
+			root = root->right;
+			delete temp;
+		}
+		
+		else if(root->right == NULL) {
+			BstNode* temp = root;
+			root = root->left;
+			delete temp;
+		}
+		
+		else {
+			BstNode* temp = FindMinNode(root->right);
+			root->data = temp->data;
+			root->right = Delete(root->right, temp->data);
+		}
+		// else {
+			// BstNode* temp = FindMaxNode(root->left);
+			// root->data = temp->data;
+			// root->left = Delete(root->left, temp->data);
+		// }
+	}
+	return root;
+}
+
 int main() {
 	BstNode* root = NULL;int num;
 	root = Insert(root, 10); root = Insert(root, 2);
 	root = Insert(root, 30); root = Insert(root, 40);
 	root = Insert(root, 5); root = Insert(root, 60);
-	root = Insert(root, 70); root = Insert(root, 8);
+	root = Insert(root, 2); root = Insert(root, 8);
 	root = Insert(root, 9); root = Insert(root, 100);
 	// cout<< Search(root, 40) << "\n";
 	// cout<< Search(root, 35);
@@ -144,6 +275,27 @@ int main() {
 	// To traverse the tree in DEPTH FIRST TRAVERSAL - IN ORDER TRAVERSAL
 	cout << "\nIn-Order Traversal : ";
 	InOrderTraversal(root);
+	
+	// cout << "\n" << INT_MAX << "\t" << INT_MIN;
+	
+	
+	cout << "\n1) Checking if it is BST or not : ";
+	cout << IsBST(root);
+	
+	
+	cout << "\n2) Checking if it is BST or not : ";
+	cout << IsBST_New(root);
+	
+	
+	cout << "\nEnter the no. to Search and print subtree :";
+	cin >> num;
+	// Will print true if entered no. exist in the tree otherwise print false
+	PreOrderTraversal(SearchNode(root, num));
+	
+	cout << "\nEnter the no. to Delete :";
+	cin >> num;
+	// Will print true if entered no. exist in the tree otherwise print false
+	PreOrderTraversal(Delete(root, num));
 	
 	return 0;
 }
