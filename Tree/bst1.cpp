@@ -106,7 +106,19 @@ int FindHeight(BstNode* root) {
 	else
 		return (max(FindHeight(root->left), FindHeight(root->right)) + 1);
 }
-
+void TopView(BstNode* root) {
+	if(root == NULL) return;
+	if(FindHeight(root->left)=>FindHeight(root->right)) {
+		while(root->left!=NULL) {
+			cout<<root->data<<" ";
+			root=root->left;
+		}
+	}else {
+		while(root->right!=NULL) {
+			cout<<root->data<<" ";
+			root=root->right;
+	}
+}	
 void LevelOrderTraversal(BstNode* root) {
 	if(root==NULL) return;
 	queue<BstNode*> q;
