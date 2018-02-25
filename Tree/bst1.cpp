@@ -108,7 +108,7 @@ int FindHeight(BstNode* root) {
 }
 void TopView(BstNode* root) {
 	if(root == NULL) return;
-	if(FindHeight(root->left)=>FindHeight(root->right)) {
+	if(FindHeight(root->left)>=FindHeight(root->right)) {
 		while(root->left!=NULL) {
 			cout<<root->data<<" ";
 			root=root->left;
@@ -117,12 +117,13 @@ void TopView(BstNode* root) {
 		while(root->right!=NULL) {
 			cout<<root->data<<" ";
 			root=root->right;
+		}
 	}
 }	
 void LevelOrderTraversal(BstNode* root) {
 	if(root==NULL) return;
 	queue<BstNode*> q;
-	q.push(root);
+	q.push(root);	
 	
 	while(!q.empty()){
 		BstNode* current = q.front();
@@ -249,65 +250,175 @@ BstNode* Delete(BstNode* root, int value) {
 	return root;
 }
 
+// Check if the path exists
+
+bool pathExist(BstNode *r, int n) {
+	if(r==NULL) {
+		return (n==0);
+	}
+	else if(r->left==NULL && r->right==NULL) {
+		return (n-r->data==0);
+	}
+	else
+		return (pathExist(r->left, n-r->data) || pathExist(r->right, n-r->data));
+	
+}
+char * myPath;
+// char * pathPrint(BstNode *r, int n) {
+	
+	// if(pathExist(r,n)) {
+		
+		// if(r==NULL) {
+			// myPath+=n;
+		// }
+		// else if(r->left==NULL && r->right==NULL) {
+			// myPath+=r->data;
+		// }
+		// else {
+				// if(pathExist(r->left, n-r->data))
+					// myPath+=r->data;
+				// else if (pathExist(r->right, n-r->data))
+					// myPath+=r->data;
+				// else
+					// myPath=myPath;
+		// }
+		
+		// return myPath;
+	// }	
+	// else
+		// cout<<"\nNo path Exist";
+// }
+
+void pathPrint(BstNode *r, int n) {
+	
+	if(pathExist(r,n)) {
+		
+		cout<<" "<<r->data;
+		if(n-r->data!=0) {
+			pathPrint(r->left, n-r->data);
+			pathPrint(r->right, n-r->data);
+		}
+		
+	}
+	else return;
+	
+}
+
+void pathPrintBT(BstNode *r, int n) {
+	
+	if(pathExist(r,n)) {
+		
+		cout<<" "<<r->data;
+		if(n-r->data!=0) {
+			pathPrint(r->left, n-r->data);
+			pathPrint(r->right, n-r->data);
+		}
+		
+	}
+	else return;
+	
+}
+
+
 int main() {
 	BstNode* root = NULL;int num;
-	root = Insert(root, 10); root = Insert(root, 2);
-	root = Insert(root, 30); root = Insert(root, 40);
-	root = Insert(root, 5); root = Insert(root, 60);
-	root = Insert(root, 2); root = Insert(root, 8);
-	root = Insert(root, 9); root = Insert(root, 100);
+	// root = Insert(root, 35); root = Insert(root, 2);
+	// root = Insert(root, 30); root = Insert(root, 40);
+	// root = Insert(root, 5); root = Insert(root, 60);
+	// root = Insert(root, 22); root = Insert(root, 8);
+	// root = Insert(root, 9); root = Insert(root, 10);
+	// root = Insert(root, 92); root = Insert(root, 65);
+	
+	
+	root = Insert(root, 5); root = Insert(root, 2);
+	root = Insert(root, 8); root = Insert(root, 4);
+	root = Insert(root, 3); root = Insert(root, 9);
+	root = Insert(root, 6); root = Insert(root, 10);
+	root = Insert(root, 1); root = Insert(root, 7);
+	
+	
 	// cout<< Search(root, 40) << "\n";
 	// cout<< Search(root, 35);
 	
-	// Testing the Search() function
-	cout << "Enter the no. to Search :";
-	cin >> num;
-	// Will print true if entered no. exist in the tree otherwise print false
-	cout << (Search(root, num)? "true\n": "false\n");
+	// // Testing the Search() function
+	// cout << "Enter the no. to Search :";
+	// cin >> num;
+	// // Will print true if entered no. exist in the tree otherwise print false
+	// cout << (Search(root, num)? "true\n": "false\n");
 	
-	// to print min and max of the tree
-	cout << "Min :" << FindMin(root) <<"\nMax :" << FindMax(root) << "\n";
-	// cout << max(2,3);
+	// // to print min and max of the tree
+	// cout << "Min :" << FindMin(root) <<"\nMax :" << FindMax(root) << "\n";
+	// // cout << max(2,3);
 	
-	// To print height of the tree
-	cout << FindHeight(root) << "\n";
+	// // To print height of the tree
+	// cout << FindHeight(root) << "\n";
 	
-	// To traverse the tree in BREADTH FIRST TRAVERSAL - LEVEL ORDER TRAVERSAL
-	cout << "\nLevel Order Traversal : ";
-	LevelOrderTraversal(root);
+	// // To traverse the tree in BREADTH FIRST TRAVERSAL - LEVEL ORDER TRAVERSAL
+	// cout << "\nLevel Order Traversal : ";
+	// LevelOrderTraversal(root);
 	
 	cout << "\nPre Order Traversal : ";
 	// To traverse the tree in DEPTH FIRST TRAVERSAL - PRE ORDER TRAVERSAL
 	PreOrderTraversal(root);
 	
-	// To traverse the tree in DEPTH FIRST TRAVERSAL - POST ORDER TRAVERSAL
-	cout << "\nPost Order Traversal : ";
-	PostOrderTraversal(root);
+	// // To traverse the tree in DEPTH FIRST TRAVERSAL - POST ORDER TRAVERSAL
+	// cout << "\nPost Order Traversal : ";
+	// PostOrderTraversal(root);
 	
 	// To traverse the tree in DEPTH FIRST TRAVERSAL - IN ORDER TRAVERSAL
 	cout << "\nIn-Order Traversal : ";
 	InOrderTraversal(root);
 	
-	// cout << "\n" << INT_MAX << "\t" << INT_MIN;
+	// // cout << "\n" << INT_MAX << "\t" << INT_MIN;
 	
 	
-	cout << "\n1) Checking if it is BST or not : ";
-	cout << IsBST(root);
+	// cout << "\n1) Checking if it is BST or not : ";
+	// cout << IsBST(root);
 	
 	
-	cout << "\n2) Checking if it is BST or not : ";
-	cout << IsBST_New(root);
+	// cout << "\n2) Checking if it is BST or not : ";
+	// cout << IsBST_New(root);
 	
 	
-	cout << "\nEnter the no. to Search and print subtree :";
-	cin >> num;
-	// Will print true if entered no. exist in the tree otherwise print false
-	PreOrderTraversal(SearchNode(root, num));
+	// cout << "\nEnter the no. to Search and print subtree :";
+	// cin >> num;
+	// // Will print true if entered no. exist in the tree otherwise print false
+	// PreOrderTraversal(SearchNode(root, num));
 	
-	cout << "\nEnter the no. to Delete :";
-	cin >> num;
-	// Will print true if entered no. exist in the tree otherwise print false
-	PreOrderTraversal(Delete(root, num));
+	// cout << "\nEnter the no. to Delete :";
+	// cin >> num;
+	// // Will print true if entered no. exist in the tree otherwise print false
+	// PreOrderTraversal(Delete(root, num));
+	
+	cout<<"\n---------------------------";
+	
+	cout<<"\nPath exists for 8: "<<pathExist(root, 8);
+	cout<<"\nPath exists for 14: "<<pathExist(root, 14);
+	cout<<"\nPath exists for 15: "<<pathExist(root, 15);
+	
+	
+	cout<<"\nPath for 8: ";
+	pathPrint(root,8);
+	
+	
+	cout<<"\nPath for 14: ";
+	pathPrint(root,14);
+	
+	
+	cout<<"\nPath for 15: ";
+	pathPrint(root,15);
+	// if(pathExist(root, 50)){
+		// cout<<"Path exists for 50";
+	// }
+	// else
+		// cout<<"Path do not exist for 50";
+	
+	
+	// if(pathExist(root, 62)){
+		// cout<<"\nPath exists for 44";
+	// }
+	// else
+		// cout<<"\nPath do not exist for 44";
 	
 	return 0;
 }

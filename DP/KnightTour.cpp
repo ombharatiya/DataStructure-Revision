@@ -1,4 +1,5 @@
 // The Knight Tour Problem
+// Copyright OM Bharatiya
 
 #include<iostream>
 #define N 8
