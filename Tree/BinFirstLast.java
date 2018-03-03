@@ -1,6 +1,6 @@
 import java.io.*;
 import java.util.*;
-
+// Print all no.s whose 1st and last digits are 1 in binary representation
 
 class BinFirstLast{
 	public static void main(String args[]) {

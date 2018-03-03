@@ -1,5 +1,6 @@
 // Copyright OM Bharatiya
-
+// No of path possible to go to the (N-1,N-1) block of a matrix starting from (0,0)
+// 1 denotes Obstacle in the path in the matrix
 #include<iostream>
 #define N 4
 using namespace std;

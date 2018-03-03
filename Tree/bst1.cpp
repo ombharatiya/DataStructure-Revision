@@ -250,20 +250,8 @@ BstNode* Delete(BstNode* root, int value) {
 	return root;
 }
 
-// Check if the path exists
 
-bool pathExist(BstNode *r, int n) {
-	if(r==NULL) {
-		return (n==0);
-	}
-	else if(r->left==NULL && r->right==NULL) {
-		return (n-r->data==0);
-	}
-	else
-		return (pathExist(r->left, n-r->data) || pathExist(r->right, n-r->data));
-	
-}
-char * myPath;
+// char * myPath;
 // char * pathPrint(BstNode *r, int n) {
 	
 	// if(pathExist(r,n)) {
@@ -289,6 +277,19 @@ char * myPath;
 		// cout<<"\nNo path Exist";
 // }
 
+// Check if the path exists
+
+bool pathExist(BstNode *r, int n) {
+	if(r==NULL) {
+		return (n==0);
+	}
+	else if(r->left==NULL && r->right==NULL) {
+		return (n-r->data==0);
+	}
+	else
+		return (pathExist(r->left, n-r->data) || pathExist(r->right, n-r->data));
+	
+}
 void pathPrint(BstNode *r, int n) {
 	
 	if(pathExist(r,n)) {
@@ -304,19 +305,39 @@ void pathPrint(BstNode *r, int n) {
 	
 }
 
+bool isPath(BstNode *r, int n, int track[], int t, int h) {
+	// if(t==h) return true;
+	if(r==NULL) return (n==0);
+	if(pathExist(r->left,n-r->data)) {
+		track[t]=r->data;
+		if(isPath(r->left,n-r->data,track,t+1,h)) return true;
+		else
+			track[t]=0;
+	}
+	if(pathExist(r->right,n-r->data)) {
+		track[t]=r->data;
+		if(isPath(r->right,n-r->data,track,t+1,h)) return true;
+		else
+			track[t]=0;
+	}
+	return false;
+}
+
 void pathPrintBT(BstNode *r, int n) {
 	
-	if(pathExist(r,n)) {
-		
-		cout<<" "<<r->data;
-		if(n-r->data!=0) {
-			pathPrint(r->left, n-r->data);
-			pathPrint(r->right, n-r->data);
+	int h=FindHeight(r);
+	if(h!=-1) {
+		int track[n];
+		for(int i=0;i<n;i++) {
+			track[i]=0;
 		}
-		
+		if(isPath(r,n,track,0,h))
+			PrintArr(track);
+		else
+			cout<<"\nNO PATH PRESENT";
 	}
-	else return;
-	
+	else
+		cout<<"\nZERO HEIGHT TREE";
 }
 
 
@@ -335,7 +356,8 @@ int main() {
 	root = Insert(root, 3); root = Insert(root, 9);
 	root = Insert(root, 6); root = Insert(root, 10);
 	root = Insert(root, 1); root = Insert(root, 7);
-	
+	root = Insert(root, 2); root = Insert(root, 2);
+	root = Insert(root, 2); 
 	
 	// cout<< Search(root, 40) << "\n";
 	// cout<< Search(root, 35);
@@ -407,6 +429,26 @@ int main() {
 	
 	cout<<"\nPath for 15: ";
 	pathPrint(root,15);
+	
+	
+	cout<<"\n--------------BT-------------";
+	
+	cout<<"\nPath exists for 8: "<<pathExistBT(root, 8);
+	cout<<"\nPath exists for 14: "<<pathExistBT(root, 14);
+	cout<<"\nPath exists for 15: "<<pathExistBT(root, 15);
+	
+	
+	cout<<"\nPath for 8: ";
+	pathPrint(root,8);
+	
+	
+	cout<<"\nPath for 14: ";
+	pathPrint(root,14);
+	
+	
+	cout<<"\nPath for 15: ";
+	pathPrint(root,15);
+	
 	// if(pathExist(root, 50)){
 		// cout<<"Path exists for 50";
 	// }
